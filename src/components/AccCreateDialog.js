@@ -3,9 +3,15 @@ import "./AccCreateDialog.css"
 
 
 function AccCreateDialog(props){
+
+    function handleSubmit(e) {
+        e.preventDefault();
+        props.onCreate('hoho',20,21);
+    }
+
     return(
         <div className="acc-create-dialog">
-            <form>
+            <form onSubmit={handleSubmit}>
                 <ul>
                     <li>
                         <label for="name-input">Account Name:</label>
@@ -27,3 +33,6 @@ function AccCreateDialog(props){
         </div>
     );
 }
+
+
+export default AccCreateDialog;

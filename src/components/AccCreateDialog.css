@@ -2,4 +2,9 @@
     position: absolute;
     left: 500px;
     top: 200px;
+    background-color: darkcyan;
+}
+
+.acc-create-dialog  li {
+    list-style: none;
 }
