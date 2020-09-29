@@ -85,7 +85,7 @@ function AccCreateDialog(props){
                         />
                     </li>
                 </ul>
-                <button type="button">Cancel</button>
+                <button type="button" onClick={props.onCancel}>Cancel</button>
                 <button type="submit">Create</button>
 
             </form>

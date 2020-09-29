@@ -35,7 +35,7 @@ function App(props) {
     />
   );
 
-  const accCreateDialog = creating ? <AccCreateDialog onCreate={addAccount}/> : "";
+  const accCreateDialog = creating ? <AccCreateDialog onCreate={addAccount} onCancel={() => setCreating(false)}/> : "";
 
   return(
     <div className='app-container vert-flex-container'>
