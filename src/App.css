@@ -58,3 +58,6 @@ html {
   border: 1px solid black;
 }
 
+*:focus {
+  border: 3px solid purple;
+}

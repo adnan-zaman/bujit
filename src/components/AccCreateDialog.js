@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import "./AccCreateDialog.css"
 
-
-function AccCreateDialog(props){
+function AccCreateDialog(props, ref){
 
     //new account name
     const [accName,setAccName] = useState("");
@@ -13,9 +12,7 @@ function AccCreateDialog(props){
 
     function handleSubmit(e) {
         e.preventDefault();
-        //remove leading zeroes if there are other characters after it
-        const bal = accBal.replace(/^0+([^0]+)/,'$1','');
-        props.onCreate(accName,bal,Number(accPercent));
+        props.onCreate(accName,parseFloat(accBal),Number(accPercent));
     }
 
     
@@ -43,7 +40,6 @@ function AccCreateDialog(props){
         
         
         setFunc(e.target.value);
-        e.target.value = state;
     }
     
     return(
@@ -51,7 +47,7 @@ function AccCreateDialog(props){
             <form onSubmit={handleSubmit}>
                 <ul>
                     <li>
-                        <label htmlFor="name-input">Account Name:</label>
+                        <label htmlFor="name-input" >Account Name:</label>
                         <input 
                             type="text" 
                             id="name-input" 
@@ -59,6 +55,7 @@ function AccCreateDialog(props){
                             value={accName}
                             required={true}
                             onChange={handleChange}
+                            ref={ref}
                         /> 
                     </li>
                     <li>
@@ -93,5 +90,6 @@ function AccCreateDialog(props){
     );
 }
 
+AccCreateDialog = React.forwardRef(AccCreateDialog);
 
 export default AccCreateDialog;
