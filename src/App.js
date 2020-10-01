@@ -54,6 +54,7 @@ function App(props) {
       percentage={acc.percentage} 
       id={acc.id} 
       key={acc.id}
+      onDelete={deleteAccount}
     />
   );
 
@@ -66,13 +67,20 @@ function App(props) {
 
   //Add a new account object
   function addAccount(accName, startingBal = 0, startingPercent = 0.0) {
-    const newAcc = {name : accName, 
+    const newAcc = {
+      name : accName, 
       balance : startingBal, 
       percentage: startingPercent,
       id : nanoid()
     };
     setAccounts([...accounts, newAcc]);
     setIsCreating(false);
+  }
+
+  //Delete an account object
+  function deleteAccount(id) {
+    const updatedAccounts = accounts.filter((acc) => acc.id !== id);
+    setAccounts(updatedAccounts);
   }
 
 

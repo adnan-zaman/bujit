@@ -23,7 +23,7 @@ function Account(props) {
             <span className='visually-hidden'>Percentage for {props.name}</span> 
                 {props.percentage}%
             </div>
-            <button className='acc-delete'>
+            <button className='acc-delete' onClick={() => props.onDelete(props.id)}>
             <span className='visually-hidden'>Delete {props.name}</span> 
                 Delete
             </button>
