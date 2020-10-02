@@ -3,6 +3,7 @@ import { nanoid } from "nanoid"
 import "./App.css"
 import Account from "./components/Account"
 import AccCreateDialog from "./components/AccCreateDialog"
+import Dialog from "./components/Dialog"
 
     
 /**
@@ -43,7 +44,7 @@ function usePrevious(newVal) {
 function App(props) {
 
   /* Account Data */
-
+  
   //array of account objects
   const [accounts, setAccounts] = useState(props.accounts);
 
@@ -65,7 +66,7 @@ function App(props) {
   const [isCreating, setIsCreating] = useState(false);
   //whether or not user was creating an account last render
   const wasCreating = usePrevious(isCreating);
-
+  
   //Add a new account object
   function addAccount(accName, startingBal = 0, startingPercent = 0.0) {
     const newAcc = {
@@ -84,7 +85,6 @@ function App(props) {
     setAccounts(updatedAccounts);
   }
 
-
   /* Focus Management */
   
   //DOM elements to focus on when switching states
@@ -98,7 +98,21 @@ function App(props) {
       focusTargets.cancelCreating.current.focus(); 
   });
 
-  
+   /* Setting up dialog box */
+
+   let dialog = null;
+   let isEditing = true;
+   //account creation dialog
+   if (isCreating) {
+     dialog = <Dialog
+       type={"create"}
+       onSubmit={addAccount}
+       onCancel={() => setIsCreating(false)}
+       ref={focusTargets.isCreating}
+     />
+   }
+
+
   return(
     <div className='app-container vert-flex-container'>
       <h1>Bujit</h1> 
@@ -115,12 +129,7 @@ function App(props) {
         </section>
       </div>
       {
-        isCreating && 
-        <AccCreateDialog 
-          onCreate={addAccount} 
-          onCancel={() => setIsCreating(false)} 
-          ref={focusTargets.isCreating}
-        />
+        dialog
       }
     </div>
    

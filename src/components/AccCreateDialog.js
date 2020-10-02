@@ -4,7 +4,7 @@ import "./AccCreateDialog.css"
 function AccCreateDialog(props, ref){
 
     //new account name
-    const [accName,setAccName] = useState("");
+    const [accName,setAccName] = useState("fund");
     //new account starting balance
     const [accBal,setAccBal] = useState("0");
     //new account pay percentage
