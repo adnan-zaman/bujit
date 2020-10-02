@@ -1,10 +1,19 @@
 .acc-create-dialog {
     position: absolute;
-    left: 500px;
-    top: 200px;
-    background-color: darkcyan;
+    border: 3px solid black;
+    padding: 10px 5px 2px 5px;
+    transform: translate(
+        calc(var(--app-container-size)/2 - 50%)
+        ,calc(50vh - 50%)
+    );
+    color: var(--primary-font-color);
+    background-color: #393b70;
 }
 
 .acc-create-dialog  li {
     list-style: none;
+}
+
+input[id = "bal-input"], input[id = "percent-input"] {
+    width: 20%;
 }

@@ -26,6 +26,8 @@ function useFocusTargets(focusStates) {
   return focusTargets.current;
 }
 
+
+
 /**
  * Get the value of a given variable from the last render.
  * 
@@ -37,7 +39,6 @@ function usePrevious(newVal) {
   useEffect(() => {currVal.current = newVal;});
   return currVal.current;
 }
-
 
 function App(props) {
 
@@ -100,7 +101,7 @@ function App(props) {
   
   return(
     <div className='app-container vert-flex-container'>
-      <h1>Bujit</h1>
+      <h1>Bujit</h1> 
       <div className='app-main vert-flex-container'>
         <section className='acc-area'>
           {
@@ -122,6 +123,7 @@ function App(props) {
         />
       }
     </div>
+   
   );
 }
 

@@ -1,11 +1,64 @@
 .acc-container {
-    border: 1px solid black;
+    display: grid;
+    grid-template-areas:
+        "name name name bal  bal  bal  plabel plabel plabel percent percent percent"
+        "aadd aadd asub asub hist hist edit   edit   edit   delete  delete   delete";
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    grid-gap: 2px;
+    border: 5px outset #888;
+    margin: 20px 5px 20px 5px;   
 }
 
-.acc-container > button {
-    width: 50px;
-    height: 50px;
-    color: white;
-    background-color: steelblue;
-    border-radius: 10px;
+
+
+.acc-container > label {
+    display: inline-block;
+    vertical-align: bottom;
+    background-color: thistle;
+}
+
+.acc-container > button, .acc-container > input, .acc-container > label {
+    font-size: 2vw;
+}
+
+.acc-name {
+    grid-area: name;
+}
+
+.acc-bal {
+    grid-area:  bal ;
+}
+
+.percent-label {
+    grid-area:  plabel ;
+}
+
+.acc-percent {
+    grid-area:  percent ;
+}
+
+.acc-add {
+    grid-area: aadd ;
+}
+
+.acc-remove {
+    grid-area:  asub ;
+}
+
+.acc-history {
+    grid-area:  hist ;
+}
+
+.acc-edit {
+    grid-area:  edit ;
+}
+
+.acc-delete {
+    grid-area:  delete ;
+}
+
+input:disabled {
+    color: black;
+    text-align: right;
 }

@@ -43,50 +43,53 @@ function AccCreateDialog(props, ref){
     }
     
     return(
-        <div className="acc-create-dialog">
-            <form onSubmit={handleSubmit}>
-                <ul>
-                    <li>
-                        <label htmlFor="name-input" >Account Name:</label>
-                        <input 
-                            type="text" 
-                            id="name-input" 
-                            name="name-input" 
-                            value={accName}
-                            required={true}
-                            onChange={handleChange}
-                            ref={ref}
-                        /> 
-                    </li>
-                    <li>
-                        <label htmlFor="bal-input">Starting Balance:</label>
-                        <input
-                            type="text" 
-                            id="bal-input" 
-                            name="bal-input" 
-                            value={accBal}
-                            pattern="[0-9]*(\.[0-9][0-9])?"
-                            onChange={handleChange}
-                        /> 
-                    </li>
-                    <li>  
-                        <label htmlFor="percent-input">Pay Percentage:</label>
-                        <input 
-                            type="number" 
-                            id="percent-input" 
-                            name="percent-input" 
-                            value={accPercent}
-                            min="0"
-                            max="100"
-                            onChange={handleChange}
-                        />
-                    </li>
-                </ul>
-                <button type="button" onClick={props.onCancel}>Cancel</button>
-                <button type="submit">Create</button>
+        
+            <div className="acc-create-dialog">
+                <form onSubmit={handleSubmit}>
+                    <ul>
+                        <li>
+                            <label htmlFor="name-input" >Account Name:</label>
+                            <input 
+                                type="text" 
+                                id="name-input" 
+                                name="name-input" 
+                                value={accName}
+                                required={true}
+                                onChange={handleChange}
+                                ref={ref}
+                            /> 
+                        </li>
+                        <li>
+                            <label htmlFor="bal-input">Starting Balance:</label>
+                            <input
+                                id="bal-input" 
+                                name="bal-input" 
+                                value={accBal}
+                                pattern="[0-9]*(\.[0-9][0-9])?"
+                                onChange={handleChange}
+                            /> 
+                        </li>
+                        <li>  
+                            <label htmlFor="percent-input">Pay Percentage:</label>
+                      
+                            <input 
+                                type="text" 
+                                id="percent-input" 
+                                name="percent-input" 
+                                value={accPercent}
+                                min="0"
+                                max="100"
+                                onChange={handleChange}
+                            />
+                        </li>
+                    </ul>
+                    <button type="button" onClick={props.onCancel}>Cancel</button>
+                    <button type="submit">Create</button>
 
-            </form>
-        </div>
+                </form>
+            </div>
+        
+       
     );
 }
 

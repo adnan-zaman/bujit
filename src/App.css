@@ -1,3 +1,5 @@
+/* working Palette URL: http://paletton.com/#uid=13Z0u0klE57bMg6hmb5qR9+Dv5+
+
 /* RESETS */
 
 *, *::before, *::after {
@@ -7,7 +9,7 @@
 }
 
 html {
-  font-size: 16px;
+  font-size: 1vw;
   font-family: sans-serif;
 }
 
@@ -16,48 +18,69 @@ html {
   display: none;
 }
 
-/* STYLES */
-
 .vert-flex-container {
   display: flex;
   flex-direction: column;
 }
 
-.app-container {
-  width: 50%;
-  height: 100vh;
-  margin: 0 auto;
-  border: 1px solid black;
+:root {
+  background-color: #0C0C1C;
+  --secondary-bg-color : #363757;
+  --primary-font-color: #8687A2;
+  --primary-btn-color: #16186C;
+  --app-container-size: 75vw;
 }
 
-
-.app-container > *, .app-main > * {
-  flex: 0;
-}
-
-.app-container h1 {
-  text-align: center;
-  color: brown;
+button {
+  border-radius: 4px;
+  padding: 2px;
   font-size: 3rem;
-  letter-spacing: 2px;
-  height: 50px;
+  color: var(--primary-font-color);
+  background-color: var(--primary-btn-color);
 }
 
-.app-container .app-main {
-  flex : 1;
+label, button, input {
+  font-size: 3rem;
 }
 
-.app-main .acc-area {
-  flex : 1;
-  border: 1px solid red;
-  background-color: wheat;
-  overflow-y: scroll;
+/* STYLES */
+
+.app-container {
+  height: 100vh;
+  width: var(--app-container-size);
+  margin: auto;
 }
 
-.app-main .toolbar {
-  border: 1px solid black;
+h1 {
+  flex: 0 1 auto;
+  text-align: center;
+  font-size: 5rem;
+  color: var(--primary-font-color);
+  
 }
 
-*:focus {
-  border: 3px solid purple;
+p {
+  text-align: center;
+  color: var(--primary-font-color);
+  font-size: 2rem;
+}
+
+
+.app-main {
+  flex: 1 1 auto;
+  min-height: 75%;
+  
+}
+
+.acc-area {
+  flex: 1 1 auto;
+  border: 3px inset black;
+  overflow-y: auto;
+  background-color: var(--secondary-bg-color);
+}
+
+.toolbar {
+  flex: 0 1 15%;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
 }
