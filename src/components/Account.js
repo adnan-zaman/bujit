@@ -31,7 +31,15 @@ function Account(props) {
             <button className='acc-history'>
                 i <span className='visually-hidden'>Transaction History for {props.name}</span>
             </button>
-            <button className='acc-edit'>
+            <button 
+                id={'edit-'+props.id}
+                className='acc-edit' 
+                onClick={() => 
+                    props.onEdit(
+                        {id: props.id, name: props.name, percent: props.percentage}, 
+                        'edit-'+props.id)
+                }
+            >
                 Edit
                 <span className='visually-hidden'>info for {props.name}</span>  
             </button>
