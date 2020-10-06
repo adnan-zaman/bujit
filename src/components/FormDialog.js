@@ -29,7 +29,6 @@ function FormDialog(props, ref){
         formReqs = [true,false,false];
         submitBtnText = "Create";
     }
-
     else if (props.type === "edit") {
         formVals = {
             "Account Name" : props.accountData.name, 
@@ -37,6 +36,14 @@ function FormDialog(props, ref){
         };
         formTypes = ["text","percent"];
         formReqs = [true,false];
+        submitBtnText = "Save";
+    }
+    else if (props.type === "add") {
+        formVals = {
+            "Amount" : ""
+        };
+        formTypes = ["money"];
+        formReqs = [true];
         submitBtnText = "Save";
     }
     
@@ -67,28 +74,37 @@ function FormDialog(props, ref){
         const label = <label htmlFor={labelName}>{labelName + ":"}</label>;
         
         let refTarget = focusTarget? ref : null;
-
         let className = inputType;
-        if (inputType == "money" || inputType == "percent")
-            className += " num";
+        let numProps = {};
 
-        let pattern = ".*";
-        //only numbers up to two decimal places
-        if (inputType === "money")
-            pattern = "[0-9]*(\.[0-9][0-9])?"
-        //only numbers between 0 and 100
-        else if (inputType === "percent") 
-            pattern = "100|[0-9]?[0-9]";
+        //conditional attributes for numbers
+        if (inputType === "money" || inputType === "percent") {
+            className += " num";
+            numProps.type = "number";
+            numProps.min = "0";
+            
+            if (inputType === "percent") 
+                numProps.max = "100";
+            else {
+                numProps.step = "0.01";
+                if (props.type === "remove")
+                    numProps.max = props.accountData.balance;
+            }
+                
+        };
         
-        const input = <input
-                        id={labelName}
-                        className={className}
-                        value={formValues[labelName]}
-                        pattern={pattern}
-                        required={required} 
-                        onChange={handleChange}
-                        ref={refTarget}
-                      />
+        const input = ( 
+            <input
+                id={labelName}
+                className={className}
+                value={formValues[labelName]}
+                required={required} 
+                onChange={handleChange}
+                ref={refTarget}
+                type={"text"}
+                {...numProps}
+            />
+        );
 
         return (
             <li key={index}>
@@ -101,6 +117,7 @@ function FormDialog(props, ref){
 
     }
 
+    const [errorMsg,setErrorMsg] = useState("");
     /**
      * Handles form submission
      * 
@@ -108,11 +125,15 @@ function FormDialog(props, ref){
      */
     function handleSubmit(e) {
         e.preventDefault();
+
+        if (!validateInputs())
+            return;
+
         //different params will be expected depending on what kind of dialog this is
         if (props.type === "create") {
             props.onSubmit(
                 formValues["Account Name"], 
-                parseFloat(formValues["Starting Balance"]), 
+                Number(formValues["Starting Balance"]), 
                 Number(formValues["Pay Percentage"])
             );
         }
@@ -122,8 +143,53 @@ function FormDialog(props, ref){
                 formValues["Account Name"], 
                 Number(formValues["Pay Percentage"]));
         }
+        else if (props.type === "add") {
+            props.onSubmit(props.accountData.id, formValues["Amount"]);
+        }
         
     }    
+
+    /**
+     * Iterates through formValues and validates
+     * input depending on type of input (money,percent etc.)
+     * and dialog type. Sets error message.
+     * 
+     * @returns {Boolean} true if form is valid, false otherwise
+     */
+    function validateInputs()
+    {
+        for (let l in formValues) {
+            const element = document.querySelector(`input[id="${l}"]`);
+            const validityState = element.validity;
+
+            //required
+            if (validityState.valueMissing) {
+                setErrorMsg(`${l} is required`);
+                return false;
+            } 
+            //negative number
+            else if (validityState.rangeUnderflow) {
+                setErrorMsg(`${l} must be greater than or equal to ${element.min}`);
+                return false;
+            }  
+            //value too high 
+            //(balance not enough or percentage > 100)
+            else if (validityState.rangeOverflow) {
+                const msg = (props.type === "remove") 
+                            ? `${props.accountData.name} doesn't have sufficient funds` 
+                            : `${l} must be less than or equal to ${element.max}`;
+                setErrorMsg(msg);
+                return false;
+            }       
+            //
+            else if (validityState.stepMismatch) {
+                setErrorMsg(`${l} must be 2 decimal places`);
+                return false;
+            }
+            
+        }
+        return true;
+    }
  
     /**
      * Updates form field and corresponding
@@ -140,13 +206,14 @@ function FormDialog(props, ref){
     return(
         
             <div className="dialog">
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} noValidate={true}>
                     <ul>
                         {formContents}           
                     </ul>
                     <button type="button" onClick={props.onCancel}>Cancel</button>
                     <button type="submit">{submitBtnText}</button>
                 </form>
+                <p className="error-msg" aria-live={"polite"}>{errorMsg}</p>
             </div>
         
        

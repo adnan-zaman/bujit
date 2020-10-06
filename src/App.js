@@ -1,8 +1,11 @@
-import React, { useState, useRef, useEffect } from "react"
+import React, {useState, useRef, useEffect } from "react"
 import { nanoid } from "nanoid"
 import "./App.css"
 import FormDialog from "./components/FormDialog"
 import Account from "./components/Account"
+
+
+import currency from "currency.js"
 
     
 /**
@@ -36,6 +39,7 @@ function usePrevious(newVal) {
 
 function App(props) {
 
+  
   /* Focus Management & Dialog Logic */
 
   //depending on input, dialog may be set to a Dialog component
@@ -64,6 +68,8 @@ function App(props) {
       case "edit":
         submitFunc = editAccount;
         break;
+      case "add":
+        submitFunc = () => document.write("yee boiii");
     }
     setDialog(<FormDialog 
       type={type}
@@ -105,6 +111,7 @@ function App(props) {
       key={acc.id}
       onDelete={deleteAccount}
       onEdit={(accData, element) => startDialog("edit", accData, element)}
+      onAdd={(accData, element) => startDialog("add", accData, element)}
     />
   );
 
@@ -162,7 +169,6 @@ function App(props) {
   }
 
  
- 
   return(
     <div className='app-container vert-flex-container'>
       <h1>Bujit</h1> 
@@ -177,7 +183,7 @@ function App(props) {
         <section className='toolbar'>
           <button 
             id="add-account"
-            onClick={() => startDialog("create", {}, "add-account")} 
+            onClick={() => startDialog("create", {}, "add-account") }
           >
             Add Account
           </button>

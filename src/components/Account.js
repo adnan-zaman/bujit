@@ -22,7 +22,14 @@ function Account(props) {
                 value={props.percentage + "%"} 
                 disabled={true}
             />            
-            <button className='acc-add'>
+            <button id={'add-'+props.id}
+                className='acc-add' 
+                onClick={() => 
+                    props.onAdd(
+                        {id: props.id, balance: props.balance}, 
+                        'add-'+props.id)
+                }
+            >
                 + <span className='visually-hidden'>Add Money to {props.name}</span>
             </button>
             <button className='acc-remove'>
