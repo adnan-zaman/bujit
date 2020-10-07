@@ -32,7 +32,14 @@ function Account(props) {
             >
                 + <span className='visually-hidden'>Add Money to {props.name}</span>
             </button>
-            <button className='acc-remove'>
+            <button id={'remove-'+props.id}
+                className='acc-remove' 
+                onClick={() => 
+                    props.onRemove(
+                        {id: props.id, balance: props.balance, name : props.name}, 
+                        'remove-'+props.id)
+                }
+            >
                 - <span className='visually-hidden'>Take Money from {props.name}</span>
             </button>
             <button className='acc-history'>

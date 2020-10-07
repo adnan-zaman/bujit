@@ -43,10 +43,19 @@ function FormDialog(props, ref){
             "Amount" : ""
         };
         formTypes = ["money"];
-        formReqs = [true];
-        submitBtnText = "Save";
+        formReqs = [false];
+        submitBtnText = "Add";
     }
-    
+    else if (props.type === "remove") {
+        formVals = {
+            "Amount" : ""
+        };
+        formTypes = ["money"];
+        formReqs = [false];
+        submitBtnText = "Remove";
+    }
+
+    //all form fields
     let formContents = [];
 
     //the number and type of form fields varies depending on props.type
@@ -144,6 +153,9 @@ function FormDialog(props, ref){
                 Number(formValues["Pay Percentage"]));
         }
         else if (props.type === "add") {
+            props.onSubmit(props.accountData.id, formValues["Amount"]);
+        }
+        else if (props.type === "remove") {
             props.onSubmit(props.accountData.id, formValues["Amount"]);
         }
         

@@ -1,11 +1,12 @@
 import React, {useState, useRef, useEffect } from "react"
 import { nanoid } from "nanoid"
-import "./App.css"
+import AccountData from "./index"
 import FormDialog from "./components/FormDialog"
 import Account from "./components/Account"
+import "./App.css"
 
 
-import currency from "currency.js"
+
 
     
 /**
@@ -69,7 +70,11 @@ function App(props) {
         submitFunc = editAccount;
         break;
       case "add":
-        submitFunc = () => document.write("yee boiii");
+        submitFunc = addMoney;
+        break;
+      case "remove":
+        submitFunc = removeMoney;
+        break;
     }
     setDialog(<FormDialog 
       type={type}
@@ -106,21 +111,17 @@ function App(props) {
     <Account 
       name={acc.name} 
       balance={acc.balance} 
-      percentage={acc.percentage} 
+      percentage={acc.percent} 
       id={acc.id} 
       key={acc.id}
       onDelete={deleteAccount}
       onEdit={(accData, element) => startDialog("edit", accData, element)}
       onAdd={(accData, element) => startDialog("add", accData, element)}
+      onRemove={(accData, element) => startDialog("remove", accData, element)}
     />
   );
 
   /* Account Creation/Deletion */
-
-  //whether or not user is creating a new account
-  const [isCreating, setIsCreating] = useState(false);
-  //whether or not user was creating an account last render
-  const wasCreating = usePrevious(isCreating);
   
   /**
    * Add a new account object
@@ -130,13 +131,8 @@ function App(props) {
    * @param {number} startingPercent account percentage
    */
   function addAccount(accName, startingBal = 0, startingPercent = 0.0) {
-    const newAcc = {
-      name : accName, 
-      balance : startingBal, 
-      percentage: startingPercent,
-      id : nanoid()
-    };
-    setAccounts([...accounts, newAcc]);
+    accounts.push(new AccountData(accName, startingBal, startingPercent, nanoid()));
+    setAccounts(accounts);
     stopDialog();
   }
 
@@ -151,7 +147,7 @@ function App(props) {
   }
 
 
-  /* Edit Account Details */
+  /* Account Modification
 
   /**
    * Edits details of an existing account.
@@ -161,10 +157,48 @@ function App(props) {
    * @param {number} newPercent new account percentage
    */
   function editAccount(id, newName, newPercent) {
-    const newAccounts = accounts.map((acc) => 
-      (acc.id === id) ? {...acc, name: newName, percentage: newPercent} : acc
-    );
-    setAccounts(newAccounts);
+    for (let acc of accounts) {
+      if (acc.id === id) {
+        acc.name = newName;
+        acc.percent = newPercent;
+        break;
+      }
+    }
+    setAccounts(accounts);
+    stopDialog();
+  }
+
+  /**
+   * Add money to an existing account.
+   * 
+   * @param {string} id 
+   * @param {number} amount 
+   */
+  function addMoney(id, amount) {
+    for (let acc of accounts) {
+      if (acc.id === id) {
+        acc.addMoney(amount);
+        break;
+      }
+    }
+    setAccounts(accounts);
+    stopDialog();
+  }
+
+  /**
+   * Remove money from an existing account.
+   * 
+   * @param {string} id 
+   * @param {number} amount 
+   */
+  function removeMoney(id, amount) {
+    for (let acc of accounts) {
+      if (acc.id === id) {
+        acc.removeMoney(amount);
+        break;
+      }
+    }
+    setAccounts(accounts);
     stopDialog();
   }
 
@@ -189,6 +223,7 @@ function App(props) {
           </button>
         </section>
       </div>
+
       {dialog}
     </div>
    
