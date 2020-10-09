@@ -26,4 +26,28 @@ function Form(props) {
 
 }
 
-export default Form;
+/**
+ * Validates all Form Fields in a Form Component.
+ * 
+ * @param {Array} validateFuncs array of {validateFunc: f} objects where f is
+ * a Form Field's validation function
+ * @param {Function} setErrorMessage callback to set error message
+ * @returns {array} 
+ * - [0] : true if all fields valid, false otherwise
+ * - [1] : empty string if all fields valid, error message of 
+ * the first invalid field if invalid
+ */
+function validateAllFields(validateFuncs, setErrorMessage=undefined)
+{
+    for (const f of validateFuncs) {
+        const [valid, error] = f.validateFunc();
+        if (!valid) {
+            setErrorMessage && setErrorMessage(error);
+            return [false, error];
+        }
+    }
+
+    return [true, ""];
+}
+
+export {Form, validateAllFields};

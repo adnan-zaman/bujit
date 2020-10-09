@@ -16,6 +16,13 @@ import "./Dialog.css"
  * - {function} onSubmit: callback if the submit button is pressed
  * - {function} onCancel: callback if cancel button is pressed
  * @param {object} ref dialog will fill ref with focus target 
+ * 
+ * ## Account Data contents for different types ##
+ * - create: {} (nothing needed)
+ * - edit: id = Acccount ID, name = Account Name, percent = Account Percent
+ * - add: id = Account ID, name = Account Name
+ * - subtract: id = Account ID, name = Account Name, balance = Account Balance 
+ * - transfer: accounts = array of AccountData objects 
  */
 function Dialog(props, ref) {
     let dialogBody;

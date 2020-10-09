@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react"
-import Form from "./Form"
-import {TextFormField, MoneyFormField} from "./form-fields/FormFields"
+import { Form, validateAllFields } from "./Form"
+import {TextFormField, MoneyFormField, PercentFormField} from "./FormFields"
 
 
 /**
@@ -16,8 +16,14 @@ import {TextFormField, MoneyFormField} from "./form-fields/FormFields"
 function CreateForm(props, ref) {
     const [accName, setAccName] = useState("");
     const [accBal, setAccBal] = useState("0");
+    const [accPercent, setAccPercent] = useState("0");
     const [errorMessage, setErrorMessage] = useState("");
-    const validateFuncs = useRef([{validateFunc : undefined}, {validateFunc : undefined}]);
+    //will be passed down to form fields to get their validation functions
+    const validateFuncs = useRef([
+                            {validateFunc : undefined}, 
+                            {validateFunc : undefined},
+                            {validateFunc : undefined}
+                          ]);
 
     const accNameField =(
         <TextFormField
@@ -38,8 +44,23 @@ function CreateForm(props, ref) {
             ref={{current: {validate: validateFuncs.current[1]}}}
         />
     );
-  
 
+    const accPercentField = (
+        <PercentFormField
+            label={"Starting Percent"}
+            value={accPercent}
+            required={false}
+            onChange={handleChange}   
+            ref={{current: {validate: validateFuncs.current[2]}}}
+        />
+    );
+  
+    /**
+     * Handles change on form fields
+     * 
+     * @param {React.SyntheticEvent} e the event 
+     * @param {string} id id of the DOM element that changed 
+     */
     function handleChange(e, id) {
         let stateFunc;
         switch (id) {
@@ -49,20 +70,23 @@ function CreateForm(props, ref) {
             case "Starting Balance":
                 stateFunc = setAccBal;
                 break;
+            case "Starting Percent":
+                stateFunc = setAccPercent;
+                break;
         }
         stateFunc(e.target.value);
     }
 
+    /**
+     * Handles form submission
+     * 
+     * @param {React.SyntheticEvent} e the event
+     */
     function handleSubmit(e) {
         e.preventDefault();
-        for (const f of validateFuncs.current) {
-            const [valid, error] = f.validateFunc();
-            if (!valid) {
-                setErrorMessage(error)
-                return;
-            }
-        }
-        props.onSubmit(accName, Number(accBal));
+        if (!validateAllFields(validateFuncs.current, setErrorMessage)[0])
+            return;
+        props.onSubmit(accName, Number(accBal), Number(accPercent));
     }
 
     return (
@@ -74,6 +98,7 @@ function CreateForm(props, ref) {
         >
             {accNameField}
             {accBalField}
+            {accPercentField}
         </Form>
     );
 }

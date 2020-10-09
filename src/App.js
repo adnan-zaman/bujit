@@ -73,7 +73,7 @@ function App(props) {
       case "add":
         submitFunc = addMoney;
         break;
-      case "remove":
+      case "subtract":
         submitFunc = removeMoney;
         break;
     }
@@ -119,7 +119,7 @@ function App(props) {
       onDelete={deleteAccount}
       onEdit={(accData, element) => startDialog("edit", accData, element)}
       onAdd={(accData, element) => startDialog("add", accData, element)}
-      onRemove={(accData, element) => startDialog("remove", accData, element)}
+      onRemove={(accData, element) => startDialog("subtract", accData, element)}
     />
   );
 
