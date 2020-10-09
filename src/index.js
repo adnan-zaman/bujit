@@ -48,7 +48,7 @@ class AccountData {
 }
 
 const ACC_DATA = [];
-console.log('wahohoo');
+
 ReactDOM.render(
   <React.StrictMode>
     <App accounts={ACC_DATA}/>
