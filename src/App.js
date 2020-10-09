@@ -2,6 +2,7 @@ import React, {useState, useRef, useEffect } from "react"
 import { nanoid } from "nanoid"
 import AccountData from "./index"
 import FormDialog from "./components/FormDialog"
+import Dialog from "./components/Dialog"
 import Account from "./components/Account"
 import "./App.css"
 
@@ -76,11 +77,11 @@ function App(props) {
         submitFunc = removeMoney;
         break;
     }
-    setDialog(<FormDialog 
+    setDialog(<Dialog 
       type={type}
+      accountData={accData}
       onCancel={stopDialog}
       onSubmit={submitFunc}
-      accountData={accData}
       ref={focusTargets.to}  
     />);
   }
@@ -91,6 +92,7 @@ function App(props) {
   
   //DOM elements to focus on when switching states
   const focusTargets = useFocusTargets();
+  
   
   //manage focus
   useEffect(() => {
@@ -111,7 +113,7 @@ function App(props) {
     <Account 
       name={acc.name} 
       balance={acc.balance} 
-      percentage={acc.percent} 
+      percent={acc.percent} 
       id={acc.id} 
       key={acc.id}
       onDelete={deleteAccount}

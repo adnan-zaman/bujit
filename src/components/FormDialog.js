@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import "./FormDialog.css"
 
 function FormDialog(props, ref){
@@ -102,8 +103,8 @@ function FormDialog(props, ref){
                 
         };
         
-        const input = ( 
-            <input
+        const input = 
+            (<input
                 id={labelName}
                 className={className}
                 value={formValues[labelName]}
@@ -112,8 +113,9 @@ function FormDialog(props, ref){
                 ref={refTarget}
                 type={"text"}
                 {...numProps}
-            />
-        );
+            />) 
+           
+        ;
 
         return (
             <li key={index}>
@@ -214,7 +216,7 @@ function FormDialog(props, ref){
         newValues[e.target.id] = e.target.value;
         setFormValues(newValues);
     }
-   
+    
     return(
         
             <div className="dialog">

@@ -19,7 +19,7 @@ function Account(props) {
                 id='percent' 
                 className='acc-percent' 
                 type='text'  
-                value={props.percentage + "%"} 
+                value={props.percent + "%"} 
                 disabled={true}
             />            
             <button id={'add-'+props.id}
@@ -50,7 +50,7 @@ function Account(props) {
                 className='acc-edit' 
                 onClick={() => 
                     props.onEdit(
-                        {id: props.id, name: props.name, percent: props.percentage}, 
+                        {id: props.id, name: props.name, percent: props.percent}, 
                         'edit-'+props.id)
                 }
             >
