@@ -1,7 +1,6 @@
 import React, {useState, useRef, useEffect } from "react"
 import { nanoid } from "nanoid"
 import AccountData from "./index"
-import FormDialog from "./components/FormDialog"
 import Dialog from "./components/Dialog"
 import Account from "./components/Account"
 import "./App.css"
