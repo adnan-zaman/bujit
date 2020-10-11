@@ -1,7 +1,6 @@
 import React, {useState, useRef, useEffect } from "react"
 import { nanoid } from "nanoid"
 import AccountData from "./index"
-import FormDialog from "./components/FormDialog"
 import Dialog from "./components/Dialog"
 import Account from "./components/Account"
 import "./App.css"
@@ -75,6 +74,9 @@ function App(props) {
         break;
       case "subtract":
         submitFunc = removeMoney;
+        break;
+      case "transfer":
+        submitFunc = transferMoney;
         break;
     }
     setDialog(<Dialog 
@@ -204,6 +206,24 @@ function App(props) {
     stopDialog();
   }
 
+  /**
+   * Transfers money from one account to another
+   * 
+   * @param {string} sourceId account id of account to take money from
+   * @param {string} targetId account id of account to tranfer money to 
+   * @param {number} amount amount of money to transfer
+   */
+  function transferMoney(sourceId, targetId, amount) {
+    for (let acc of accounts) {
+      if (acc.id === sourceId) 
+        acc.removeMoney(amount);
+      if (acc.id === targetId) 
+        acc.addMoney(amount);      
+    }
+    setAccounts(accounts);
+    stopDialog();
+  }
+
  
   return(
     <div className='app-container vert-flex-container'>
@@ -222,6 +242,12 @@ function App(props) {
             onClick={() => startDialog("create", {}, "add-account") }
           >
             Add Account
+          </button>
+          <button 
+            id="transfer"
+            onClick={() => startDialog("transfer", props.accounts, "transfer") }
+          >
+            Transfer
           </button>
         </section>
       </div>

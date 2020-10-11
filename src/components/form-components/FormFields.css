@@ -1,0 +1,11 @@
+form input, form select {
+    width: 40%;
+}
+
+form  input[class *= "num"]{
+    width: 20%;
+}
+
+input[required] {
+    border: 1px dotted red;
+}

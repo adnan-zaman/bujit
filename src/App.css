@@ -39,7 +39,7 @@ button {
   background-color: var(--primary-btn-color);
 }
 
-label, button, input {
+label, button, input, select {
   font-size: 3rem;
 }
 
