@@ -7,7 +7,9 @@ import {TextFormField, MoneyFormField} from "./FormFields"
  * Form for editing an existing account.
  * 
  * @param {object} props expected props:
- * - {object} accountData: data to be passed to form
+ * - {string} id: account id
+ * - {string} name: account name
+ * - {number} balance: account balance
  * - {function} onSubmit: callback for form submission
  * - {function} onCancel: callback for form cancellation
  * 
@@ -38,8 +40,8 @@ function SubtractForm(props, ref) {
             label={"Amount"}
             value={subAmount}
             required={true}
-            max={props.accountData.balance}
-            associatedAccount={props.accountData.name}
+            max={props.balance}
+            associatedAccount={props.name}
             onChange={handleChange}   
             ref={{current: {validate: validateFuncs.current[1]}}}
         />
@@ -73,7 +75,7 @@ function SubtractForm(props, ref) {
         e.preventDefault();
         if (!validateAllFields(validateFuncs.current, setErrorMessage)[0])
             return; 
-        props.onSubmit(props.accountData.id, Number(subAmount),transactName);
+        props.onSubmit(props.id, Number(subAmount),transactName);
     }
 
     return (

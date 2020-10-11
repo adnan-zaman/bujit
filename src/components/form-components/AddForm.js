@@ -7,7 +7,7 @@ import {TextFormField, MoneyFormField} from "./FormFields"
  * Form for editing an existing account.
  * 
  * @param {object} props expected props:
- * - {object} accountData: data to be passed to form
+ * - {string} id account id
  * - {function} onSubmit: callback for form submission
  * - {function} onCancel: callback for form cancellation
  * 
@@ -71,7 +71,7 @@ function AddForm(props, ref) {
         e.preventDefault();
         if (!validateAllFields(validateFuncs.current, setErrorMessage)[0])
             return; 
-        props.onSubmit(props.accountData.id, Number(addAmount),transactName);
+        props.onSubmit(props.id, Number(addAmount),transactName);
     }
 
     return (

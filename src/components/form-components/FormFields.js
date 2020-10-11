@@ -267,6 +267,7 @@ function AccountSelectFormField(props, ref) {
             <select 
                 id={props.label} 
                 required={props.required} 
+                ref={ref.current.focus}
                 onChange={e => props.onChange(e,props.label)}
             >
                 {options}

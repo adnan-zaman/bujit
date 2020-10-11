@@ -55,6 +55,7 @@ function CreateForm(props, ref) {
         />
     );
   
+    
     /**
      * Handles change on form fields
      * 

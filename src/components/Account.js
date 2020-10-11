@@ -26,7 +26,7 @@ function Account(props) {
                 className='acc-add' 
                 onClick={() => 
                     props.onAdd(
-                        {id: props.id, balance: props.balance}, 
+                        {id: props.id}, 
                         'add-'+props.id)
                 }
             >
@@ -57,7 +57,10 @@ function Account(props) {
                 Edit
                 <span className='visually-hidden'>info for {props.name}</span>  
             </button>
-            <button className='acc-delete' onClick={() => props.onDelete(props.id)}>
+            <button 
+                id={'del-'+props.id} 
+                className='acc-delete' 
+                onClick={() => props.onDelete(props.id,'del-'+props.id)}>
                 Delete
                 <span className='visually-hidden'>{props.name}</span> 
             </button>

@@ -4,6 +4,7 @@ import EditForm from "./form-components/EditForm"
 import AddForm from "./form-components/AddForm"
 import SubtractForm from "./form-components/SubtractForm"
 import TransferForm from "./form-components/TransferForm"
+import Alert from "./alert-components/Alert"
 import "./Dialog.css"
 
 
@@ -12,25 +13,27 @@ import "./Dialog.css"
  * 
  * @param {object} props expected props:
  * - {string} type: type of dialog to be made
- * - {object} accountData: data to be passed to dialog (depends on type)
+ * - {object} properties: props to be passed to dialog (depends on type)
  * - {function} onSubmit: callback if the submit button is pressed
  * - {function} onCancel: callback if cancel button is pressed
  * @param {object} ref dialog will fill ref with focus target 
  * 
- * ## Account Data contents for different types ##
- * - create: {} (nothing needed)
- * - edit: id = Acccount ID, name = Account Name, percent = Account Percent
- * - add: id = Account ID, name = Account Name
- * - subtract: id = Account ID, name = Account Name, balance = Account Balance 
- * - transfer: accounts = array of AccountData objects 
+ * ## Properties required for different types ##
+ * ### Form Types ###
+ * #### f stands for a callback function to be called on event ###
+ * - create : {onSubmit : f, onCancel: f}
+ * - edit : {id : account id, name: account name, percent: account percent, onSubmit : f, onCancel: f}
+ * - add : {id : account id, onSubmit: f, onCancel: f}
+ * - subtract: {id : account id, name: account name, balance: account balance, onSubmit : f, onCancel: f}
+ * - transfer : {accounts : AccountData[], onSubmit : f, onCancel: f}
+ * ### Alert Types ###
+ * - alert : {msg : message, (name : f)} at least one property, msg, that contains a string which
+   * is the messaged to be displayed, followed by one or more properties where the property name is
+   * the name of button and the property value is the callback function to be called on button click
  */
 function Dialog(props, ref) {
     let dialogBody;
-    const properties = {accountData : props.accountData,
-                        onSubmit : props.onSubmit,
-                        onCancel : props.onCancel,
-                        ref : ref};
-
+    let properties = {...props.properties, ref : ref};
     switch (props.type) {
         case "create":
             dialogBody = <CreateForm {...properties} />
@@ -46,6 +49,9 @@ function Dialog(props, ref) {
             break;
         case "transfer":
             dialogBody = <TransferForm {...properties} />
+            break;
+        case "alert":
+            dialogBody = <Alert {...properties} />
     }
 
 

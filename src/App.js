@@ -49,41 +49,55 @@ function App(props) {
   const wasThereDialog = usePrevious(dialog);
 
   /**
-   * Creates a dialog box of a specified type.
-   * Changes values of focusTargets. 
+   * Creates a dialog box of a specified type and manages
+   * focus between initiating element and dialog elements.
    * 
-   * @param {string} type type of dialog box (create, edit, transfer etc.)
-   * @param {object} accData obj or obj[] containing data dialog
-   * @param {*} element id of DOM element or DOM element itself
+   * @param {string} type type of dialog box (create, edit, alert etc.)
+   * @param {*} element id of DOM element / DOM element reference of initiating elements
+   * @param {*} data data required by dialog, depends on type
+   * 
+   * ## Valid Types and Required Data
+   * - create : nothing needed
+   * - edit : {id : account id, name: account name, percent: account percent}
+   * - add : {id : account id}
+   * - subtract: {id : account id, name: account name, balance: account balance}
+   * - transfer : {accounts : AccountData[]}
+   * - alert : {msg : message, (name : f)} at least one property msg that contains a string which
+   * is the messaged to be displayed followed one or more properties where the property name is
+   * the name of button and the property value is the callback function to be called on button click
+   * 
    */
-  function startDialog(type, accData, element) {
+  function startDialog(type, element, data={}) {
     if (typeof element === "string")
       focusTargets.from.current = document.querySelector("#"+element);
     else
       focusTargets.from.current = element;
-    let submitFunc;
-    switch (type) {
-      case "create":
-        submitFunc = addAccount;
-        break;
-      case "edit":
-        submitFunc = editAccount;
-        break;
-      case "add":
-        submitFunc = addMoney;
-        break;
-      case "subtract":
-        submitFunc = removeMoney;
-        break;
-      case "transfer":
-        submitFunc = transferMoney;
-        break;
+
+    if (type !== "alert")
+    {
+      switch (type) {
+        case "create":
+          data.onSubmit = addAccount;
+          break;
+        case "edit":
+          data.onSubmit = editAccount;  
+          break;  
+        case "add":
+          data.onSubmit = addMoney;   
+          break
+        case "subtract":
+          data.onSubmit = removeMoney;
+          break;
+        case "transfer":
+          data.onSubmit = transferMoney;
+          break;
+      }
+      data.onCancel = stopDialog;
     }
+    
     setDialog(<Dialog 
       type={type}
-      accountData={accData}
-      onCancel={stopDialog}
-      onSubmit={submitFunc}
+      properties={data}
       ref={focusTargets.to}  
     />);
   }
@@ -118,10 +132,10 @@ function App(props) {
       percent={acc.percent} 
       id={acc.id} 
       key={acc.id}
-      onDelete={deleteAccount}
-      onEdit={(accData, element) => startDialog("edit", accData, element)}
-      onAdd={(accData, element) => startDialog("add", accData, element)}
-      onRemove={(accData, element) => startDialog("subtract", accData, element)}
+      onDelete={(id, elt) => startDialog("alert", elt, {"No" : stopDialog, "Yes" : (id) => deleteAccount(id)})}
+      onEdit={(accData, element) => startDialog("edit", element, accData)}
+      onAdd={(accData, element) => startDialog("add", element, accData)}
+      onRemove={(accData, element) => startDialog("subtract", element, accData)}
     />
   );
 
@@ -239,13 +253,13 @@ function App(props) {
         <section className='toolbar'>
           <button 
             id="add-account"
-            onClick={() => startDialog("create", {}, "add-account") }
+            onClick={() => startDialog("create", "add-account") }
           >
             Add Account
           </button>
           <button 
             id="transfer"
-            onClick={() => startDialog("transfer", props.accounts, "transfer") }
+            onClick={() => startDialog("transfer", "transfer", {accounts: accounts}) }
           >
             Transfer
           </button>

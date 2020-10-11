@@ -7,15 +7,17 @@ import {TextFormField, PercentFormField} from "./FormFields"
  * Form for editing an existing account.
  * 
  * @param {object} props expected props:
- * - {object} accountData: data to be passed to form
+ * - {string} name account name
+ * - {number} percent account percent
+ * - {string} id account id 
  * - {function} onSubmit: callback for form submission
  * - {function} onCancel: callback for form cancellation
  * 
  * @param {object} ref form will fill this with focus target
  */
 function EditForm(props, ref) {
-    const [accName, setAccName] = useState(props.accountData.name);
-    const [accPercent, setAccPercent] = useState(props.accountData.percent);
+    const [accName, setAccName] = useState(props.name);
+    const [accPercent, setAccPercent] = useState(props.percent);
     const [errorMessage, setErrorMessage] = useState("");
     //will be passed down to form fields to get their validation functions
     const validateFuncs = useRef([
@@ -71,7 +73,7 @@ function EditForm(props, ref) {
         e.preventDefault();
         if (!validateAllFields(validateFuncs.current, setErrorMessage)[0])
             return;
-        props.onSubmit(props.accountData.id, accName, Number(accPercent));
+        props.onSubmit(props.id, accName, Number(accPercent));
     }
 
     return (

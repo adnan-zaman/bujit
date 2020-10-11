@@ -6,16 +6,17 @@ import { Form, validateAllFields } from "./Form"
  * Form for editing an existing account.
  * 
  * @param {object} props expected props:
- * - {object} accountData: data to be passed to form
+ * - {array} accounts: array of AccountData objects
  * - {function} onSubmit: callback for form submission
  * - {function} onCancel: callback for form cancellation
  * 
  * @param {object} ref form will fill this with focus target
  */
 function TransferForm(props, ref) {
+    
     //AccountSelectFormField's value corresponds to the selected account's id
-    const [sourceAcc, setSourceAcc] = useState(props.accountData[0].id);
-    const [targetAcc, setTargetAcc] = useState(props.accountData[0].id);
+    const [sourceAcc, setSourceAcc] = useState(props.accounts[0].id);
+    const [targetAcc, setTargetAcc] = useState(props.accounts[0].id);
     const [transferAmount, setTransferAmount] = useState("0");
     const [errorMessage, setErrorMessage] = useState("");
 
@@ -32,7 +33,7 @@ function TransferForm(props, ref) {
             value={sourceAcc}
             onChange={handleChange}
             required={true}
-            accounts={props.accountData}
+            accounts={props.accounts}
             ref={{current: {focus : ref, validate: validateFuncs.current[0]}}}
         />
     );
@@ -43,8 +44,8 @@ function TransferForm(props, ref) {
             value={targetAcc}
             onChange={handleChange}
             required={true}
-            accounts={props.accountData}
-            ref={{current: {focus : ref, validate: validateFuncs.current[1]}}}
+            accounts={props.accounts}
+            ref={{current: {validate: validateFuncs.current[1]}}}
         />
     );
 
@@ -56,7 +57,7 @@ function TransferForm(props, ref) {
             required={true}
             max={getAccount(sourceAcc).balance}
             associatedAccount={getAccount(sourceAcc).name}
-            ref={{current: {focus : ref, validate: validateFuncs.current[2]}}}
+            ref={{current: {validate: validateFuncs.current[2]}}}
         />
     );
 
@@ -67,7 +68,7 @@ function TransferForm(props, ref) {
      * @returns {AccountData} the account with the given account id 
      */
     function getAccount(id) {
-        for (const acc of props.accountData) {
+        for (const acc of props.accounts) {
             if (acc.id === id)
                 return acc;
         }
