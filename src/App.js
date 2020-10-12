@@ -244,6 +244,15 @@ function App(props) {
     stopDialog();
   }
 
+  function handleTransfer(element) {
+    if (accounts.length > 1)
+      startDialog("transfer", element, {accounts: accounts});
+    else 
+      startDialog("alert", element,
+        {msg : "You need at least 2 accounts to transfer",
+         OK : stopDialog});
+  }
+
  
   return(
     <div className='app-container vert-flex-container'>
@@ -265,7 +274,7 @@ function App(props) {
           </button>
           <button 
             id="transfer"
-            onClick={() => startDialog("transfer", "transfer", {accounts: accounts}) }
+            onClick={() => handleTransfer("transfer")} 
           >
             Transfer
           </button>
