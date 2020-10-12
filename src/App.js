@@ -132,7 +132,13 @@ function App(props) {
       percent={acc.percent} 
       id={acc.id} 
       key={acc.id}
-      onDelete={(id, elt) => startDialog("alert", elt, {"No" : stopDialog, "Yes" : (id) => deleteAccount(id)})}
+      onDelete={(id, name, elt) => startDialog("alert", elt, 
+                                                {msg: `Are you sure you want to delete ${name}?`, 
+                                                 No : stopDialog, 
+                                                 Yes : () => {deleteAccount(id); stopDialog()}
+                                                }
+                                              )}
+
       onEdit={(accData, element) => startDialog("edit", element, accData)}
       onAdd={(accData, element) => startDialog("add", element, accData)}
       onRemove={(accData, element) => startDialog("subtract", element, accData)}

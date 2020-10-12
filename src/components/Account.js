@@ -60,7 +60,7 @@ function Account(props) {
             <button 
                 id={'del-'+props.id} 
                 className='acc-delete' 
-                onClick={() => props.onDelete(props.id,'del-'+props.id)}>
+                onClick={() => props.onDelete(props.id, props.name,'del-'+props.id)}>
                 Delete
                 <span className='visually-hidden'>{props.name}</span> 
             </button>

@@ -19,7 +19,7 @@ function Form(props) {
             </ul>
             <button type="button" onClick={props.onCancel}>Cancel</button>
             <button type="submit">{props.submitButtonText}</button>
-            <p className="error-msg" aria-live={"polite"}>{props.errorMessage}</p>
+            <p className="error-msg" aria-live="polite">{props.errorMessage}</p>
         </form>
         
     );
