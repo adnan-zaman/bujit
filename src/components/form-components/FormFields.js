@@ -214,6 +214,7 @@ function PercentFormField(props, ref) {
  * @param {object} props expected props:
  * - {string} label: form element label
  * - {string} value: form element's input's value
+ * - {string} disabled (optional): which option will be disabled
  * - {boolean} required: whether or not this form element is required
  * - {array} options: array of AccountData's
  * - {function} onChange: callback for when input value changes
@@ -231,11 +232,11 @@ function AccountSelectFormField(props, ref) {
 
     //options display the name of the account
     //but have the value of the corresponding account's id
-    const options = props.accounts.map(acc =>
+    const options = props.accounts.map((acc, index) =>
         <option 
-            key={acc.id} 
-            value={acc.id} 
-            selected={acc.id === props.value} 
+            key={index} 
+            value={index} 
+            disabled={props.disabled == index}
         >
             {acc.name}
         </option>
@@ -268,6 +269,7 @@ function AccountSelectFormField(props, ref) {
                 id={props.label} 
                 required={props.required} 
                 ref={ref.current.focus}
+                value={props.value}
                 onChange={e => props.onChange(e,props.label)}
             >
                 {options}

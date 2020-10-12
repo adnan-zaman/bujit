@@ -4,6 +4,7 @@ import { Form, validateAllFields } from "./Form"
 
 /**
  * Form for editing an existing account.
+ * Assumes there are at least 2 accounts.
  * 
  * @param {object} props expected props:
  * - {array} accounts: array of AccountData objects
@@ -14,9 +15,9 @@ import { Form, validateAllFields } from "./Form"
  */
 function TransferForm(props, ref) {
     
-    //AccountSelectFormField's value corresponds to the selected account's id
-    const [sourceAcc, setSourceAcc] = useState(props.accounts[0].id);
-    const [targetAcc, setTargetAcc] = useState(props.accounts[0].id);
+    //AccountSelectFormField's value corresponds to the selected account's index 
+    const [sourceAcc, setSourceAcc] = useState("0");
+    const [targetAcc, setTargetAcc] = useState("1");
     const [transferAmount, setTransferAmount] = useState("0");
     const [errorMessage, setErrorMessage] = useState("");
 
@@ -44,6 +45,7 @@ function TransferForm(props, ref) {
             value={targetAcc}
             onChange={handleChange}
             required={true}
+            disabled={sourceAcc}
             accounts={props.accounts}
             ref={{current: {validate: validateFuncs.current[1]}}}
         />
@@ -55,24 +57,12 @@ function TransferForm(props, ref) {
             value={transferAmount}
             onChange={handleChange}
             required={true}
-            max={getAccount(sourceAcc).balance}
-            associatedAccount={getAccount(sourceAcc).name}
+            max={props.accounts[sourceAcc].balance}
+            associatedAccount={props.accounts[sourceAcc].name}
             ref={{current: {validate: validateFuncs.current[2]}}}
         />
     );
 
-    /**
-     * Gets an account from props.accountData
-     * 
-     * @param {string} id account id
-     * @returns {AccountData} the account with the given account id 
-     */
-    function getAccount(id) {
-        for (const acc of props.accounts) {
-            if (acc.id === id)
-                return acc;
-        }
-    }
   
     /**
      * Handles change on form fields
@@ -93,7 +83,13 @@ function TransferForm(props, ref) {
                 stateFunc = setTransferAmount;
                 break;
         }
+        
         stateFunc(e.target.value);
+
+        //change targetAcc so that sourceAcc != targetAcc
+        if (stateFunc === setSourceAcc && e.target.value === targetAcc)
+            setTargetAcc((Number(targetAcc) + 1) % props.accounts.length + "");
+
     }
 
     /**
@@ -105,7 +101,7 @@ function TransferForm(props, ref) {
         e.preventDefault();
         if (!validateAllFields(validateFuncs.current, setErrorMessage)[0])
             return;
-        props.onSubmit(sourceAcc, targetAcc, Number(transferAmount));
+        props.onSubmit(props.accounts[sourceAcc].id, props.accounts[targetAcc].id, Number(transferAmount));
     }
 
     return (

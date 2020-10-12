@@ -244,6 +244,12 @@ function App(props) {
     stopDialog();
   }
 
+  /**
+   * Creates a transfer dialog if there are enough
+   * accounts to do so
+   * 
+   * @param {*} element id of DOM element or DOM element of transfer button
+   */
   function handleTransfer(element) {
     if (accounts.length > 1)
       startDialog("transfer", element, {accounts: accounts});
