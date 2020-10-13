@@ -1,4 +1,5 @@
 import React from "react"
+import "../Dialog.css"
 
 /**
  * Generic form temlplate to be used by
@@ -17,8 +18,14 @@ function Form(props) {
             <ul>
                 {props.children}           
             </ul>
-            <button type="button" onClick={props.onCancel}>Cancel</button>
-            <button type="submit">{props.submitButtonText}</button>
+            <div className="button-container">
+                <div className="button-holder">
+                    <button type="button" onClick={props.onCancel}>Cancel</button>
+                </div>
+                <div className="button-holder">
+                    <button type="submit">{props.submitButtonText}</button>
+                </div>
+            </div>
             <p className="error-msg" aria-live="polite">{props.errorMessage}</p>
         </form>
         

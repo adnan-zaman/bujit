@@ -85,4 +85,12 @@ p {
   border-right: 1px solid black;
 }
 
+.total-bal {
+  width: 25%;
+}
+
+label.total-bal {
+  background-color : thistle;
+}
+
 

@@ -1,4 +1,5 @@
 import React from "react"
+import "../Dialog.css"
 
 
 /**
@@ -14,12 +15,18 @@ function Alert(props, ref) {
     const buttons = [];
     for (const p in props) {
         if (p !== "msg")
-            buttons.push(<button key={p} onClick={props[p]} ref={ref}>{p}</button>)
+            buttons.push(
+                <div className='button-holder'>
+                    <button key={p} onClick={props[p]} ref={ref}>{p}</button>
+                </div>
+            );
     }
     return (
         <div className="alert">
             <p aria-live="polite">{props.msg}</p>
-            {buttons}
+            <div className="button-container">
+                {buttons}
+            </div>
         </div>
     );
 }

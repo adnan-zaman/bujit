@@ -124,26 +124,34 @@ function App(props) {
   //array of account objects
   const [accounts, setAccounts] = useState(props.accounts);
 
-   //array of Account components 
-   const accList = accounts.map(acc => 
-    <Account 
-      name={acc.name} 
-      balance={acc.balance} 
-      percent={acc.percent} 
-      id={acc.id} 
-      key={acc.id}
-      onDelete={(id, name, elt) => startDialog("alert", elt, 
-                                                {msg: `Are you sure you want to delete ${name}?`, 
-                                                 No : stopDialog, 
-                                                 Yes : () => {deleteAccount(id); stopDialog()}
-                                                }
-                                              )}
+  //total balance
+  let totalBalance = 0;
 
-      onEdit={(accData, element) => startDialog("edit", element, accData)}
-      onAdd={(accData, element) => startDialog("add", element, accData)}
-      onRemove={(accData, element) => startDialog("subtract", element, accData)}
-    />
-  );
+   //array of Account components 
+   const accList = [];
+   
+   for (let acc of accounts) {
+    accList.push(<Account 
+        name={acc.name} 
+        balance={acc.balance} 
+        percent={acc.percent} 
+        id={acc.id} 
+        key={acc.id}
+        onDelete={(id, name, elt) => startDialog("alert", elt, 
+                                                  {msg: `Are you sure you want to delete ${name}?`, 
+                                                   No : stopDialog, 
+                                                   Yes : () => {deleteAccount(id); stopDialog()}
+                                                  }
+                                                )}
+  
+        onEdit={(accData, element) => startDialog("edit", element, accData)}
+        onAdd={(accData, element) => startDialog("add", element, accData)}
+        onRemove={(accData, element) => startDialog("subtract", element, accData)}
+      />);
+
+      totalBalance += acc.balance;
+   }
+  
 
   /* Account Creation/Deletion */
   
@@ -272,6 +280,16 @@ function App(props) {
           }
         </section>
         <section className='toolbar'>
+          <label htmlFor='total-bal' className='total-bal'>
+            Total <span className="visually-hidden">Balance</span>:
+          </label>
+          <input 
+              id='total-bal' 
+              type='text' 
+              className='total-bal' 
+              value={"$" + totalBalance} 
+              disabled={true}
+          />
           <button 
             id="add-account"
             onClick={() => startDialog("create", "add-account") }

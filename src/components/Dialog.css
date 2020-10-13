@@ -15,5 +15,21 @@
     padding-top: 3px;
 }
 
+.button-container {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+}
 
+.button-holder {
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.button-holder button {
+    display: block;
+    min-width: 50%;
+    margin: auto;
+
+}
 
