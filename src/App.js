@@ -1,6 +1,6 @@
 import React, {useState, useRef, useEffect } from "react"
 import { nanoid } from "nanoid"
-import AccountData from "./index"
+import { AccountData, TransactionData } from "./index"
 import Dialog from "./components/Dialog"
 import Account from "./components/Account"
 import "./App.css"
@@ -62,6 +62,7 @@ function App(props) {
    * - add : {id : account id}
    * - subtract: {id : account id, name: account name, balance: account balance}
    * - transfer : {accounts : AccountData[]}
+   * - history : {id : account id, name: account name}
    * - alert : {msg : message, (name : f)} at least one property msg that contains a string which
    * is the messaged to be displayed followed one or more properties where the property name is
    * the name of button and the property value is the callback function to be called on button click
@@ -73,8 +74,17 @@ function App(props) {
     else
       focusTargets.from.current = element;
 
-    if (type !== "alert")
-    {
+    if (type === "history") {
+      for (const acc of accounts) {
+        if (acc.id === data.id) {
+          data.transactions = acc.transactions;
+          delete data.id;
+          break;
+        }
+      }
+    }
+
+    if (type !== "alert") {
       switch (type) {
         case "create":
           data.onSubmit = addAccount;
@@ -94,7 +104,8 @@ function App(props) {
       }
       data.onCancel = stopDialog;
     }
-    
+    if (type === "history")
+      console.log(data);
     setDialog(<Dialog 
       type={type}
       properties={data}
@@ -143,10 +154,11 @@ function App(props) {
                                                    Yes : () => {deleteAccount(id); stopDialog()}
                                                   }
                                                 )}
-  
+
         onEdit={(accData, element) => startDialog("edit", element, accData)}
         onAdd={(accData, element) => startDialog("add", element, accData)}
         onRemove={(accData, element) => startDialog("subtract", element, accData)}
+        onHistory={(accData, element) => startDialog("history",element, accData)}
       />);
 
       totalBalance += acc.balance;
@@ -206,10 +218,11 @@ function App(props) {
    * @param {string} id 
    * @param {number} amount 
    */
-  function addMoney(id, amount) {
+  function addMoney(id, amount, transactionName) {
     for (let acc of accounts) {
       if (acc.id === id) {
         acc.addMoney(amount);
+        acc.addTransaction(amount, "add", {name : transactionName});
         break;
       }
     }
@@ -223,10 +236,11 @@ function App(props) {
    * @param {string} id 
    * @param {number} amount 
    */
-  function removeMoney(id, amount) {
+  function removeMoney(id, amount, transactionName) {
     for (let acc of accounts) {
       if (acc.id === id) {
         acc.removeMoney(amount);
+        acc.addTransaction(amount, "subtract", {name : transactionName});
         break;
       }
     }
@@ -242,12 +256,19 @@ function App(props) {
    * @param {number} amount amount of money to transfer
    */
   function transferMoney(sourceId, targetId, amount) {
+    let sourceAcc;
+    let targetAcc;
     for (let acc of accounts) {
       if (acc.id === sourceId) 
-        acc.removeMoney(amount);
+        sourceAcc = acc;
       if (acc.id === targetId) 
-        acc.addMoney(amount);      
+        targetAcc = acc;     
     }
+    sourceAcc.removeMoney(amount);
+    sourceAcc.addTransaction(amount, 'transfer-out', {other : targetAcc.name});
+    targetAcc.addMoney(amount);
+    targetAcc.addTransaction(amount, 'transfer-in', {other : sourceAcc.name});
+    
     setAccounts(accounts);
     stopDialog();
   }

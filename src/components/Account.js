@@ -42,7 +42,16 @@ function Account(props) {
             >
                 - <span className='visually-hidden'>Take Money from {props.name}</span>
             </button>
-            <button className='acc-history'>
+            <button 
+                id={"history-"+props.id}
+                className='acc-history'
+                onClick={() =>
+                    props.onHistory(
+                        {id : props.id, name: props.name},
+                        "history-"+props.id
+                    )
+                }
+            >
                 i <span className='visually-hidden'>Transaction History for {props.name}</span>
             </button>
             <button 

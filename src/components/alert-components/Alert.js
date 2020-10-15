@@ -16,8 +16,8 @@ function Alert(props, ref) {
     for (const p in props) {
         if (p !== "msg")
             buttons.push(
-                <div className='button-holder'>
-                    <button key={p} onClick={props[p]} ref={ref}>{p}</button>
+                <div key={p} className='button-holder'>
+                    <button onClick={props[p]} ref={ref}>{p}</button>
                 </div>
             );
     }

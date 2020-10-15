@@ -5,6 +5,7 @@ import AddForm from "./form-components/AddForm"
 import SubtractForm from "./form-components/SubtractForm"
 import TransferForm from "./form-components/TransferForm"
 import Alert from "./alert-components/Alert"
+import TransactionHistoryAlert from "./alert-components/TransactionHistoryAlert"
 import "./Dialog.css"
 
 
@@ -28,8 +29,10 @@ import "./Dialog.css"
  * - transfer : {accounts : AccountData[], onSubmit : f, onCancel: f}
  * ### Alert Types ###
  * - alert : {msg : message, (name : f)} at least one property, msg, that contains a string which
-   * is the messaged to be displayed, followed by one or more properties where the property name is
-   * the name of button and the property value is the callback function to be called on button click
+ * is the messaged to be displayed, followed by one or more properties where the property name is
+ * the name of button and the property value is the callback function to be called on button click
+ * 
+ * - history: {name : account name, transactions : Transaction[], onCancel : f}
  */
 function Dialog(props, ref) {
     let dialogBody;
@@ -52,6 +55,9 @@ function Dialog(props, ref) {
             break;
         case "alert":
             dialogBody = <Alert {...properties} />
+            break;
+        case "history":
+            dialogBody = <TransactionHistoryAlert {...properties} />
     }
 
 
