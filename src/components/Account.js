@@ -4,7 +4,7 @@ import "./Account.css"
 
 function Account(props) {
     return (
-        <div className='acc-container' id={props.id}>
+        <div className='acc-container list-element' id={props.id}>
             <label htmlFor='bal' className='acc-name'>{props.name}</label>
             <input 
                 id='bal' 

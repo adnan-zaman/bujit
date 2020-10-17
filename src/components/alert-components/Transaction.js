@@ -1,4 +1,5 @@
 import React from "react"
+import "../../App.css"
 
 /**
  * Visually displays a transaction
@@ -13,7 +14,7 @@ import React from "react"
  */
 function Transaction(props) {
     return (
-        <div>
+        <div className="transaction list-element clearfix"> 
             <label htmlFor={props.id}>
                 <span className="visually-hidden">
                     Amount
@@ -25,13 +26,22 @@ function Transaction(props) {
             </label>
             <input 
                 id={props.id}
-                className={(props.type === "add" | "transfer-in") ? "gain" : "loss"}
+                className={(props.type === "add" || props.type === "transfer-in") ? "gain" : "loss"}
                 value={props.amount} 
                 type="number" 
                 disabled={true}/>
-            <div>{props.name}</div>
-            <div>{(props.type === "transfer-in") ? `Transferred from ${props.other}` :
-                  `Transferred to ${props.other}`}</div>
+            
+            <p>{props.name}</p>
+            {
+                props.other &&
+                <p>{(props.type === "transfer-in") ? `Transferred from ${props.other}` :
+                    `Transferred to ${props.other}`}
+                </p>
+            }
+            <p>
+                <span className="visually-hidden">Transaction Date</span>
+                {props.date}
+            </p>
         </div>
     );
 }

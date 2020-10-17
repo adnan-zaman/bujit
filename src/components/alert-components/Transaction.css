@@ -1,0 +1,39 @@
+.transact-area {
+    flex: 1 1 75vh;
+    overflow-y: scroll;
+    border: 1px solid black;;
+}
+
+.transact-area ~ h2 {
+    font-size: 2rem;
+}
+
+.transaction input {
+    width: 25%;
+    float: right;
+    margin-bottom: 2px;
+}
+
+.transaction p {
+    margin-left: 5px;
+    margin-bottom: 2px;
+    width: 70%;
+    border-bottom: 1px solid gray;
+    overflow: ellipsis;
+    text-align: left;
+    font-weight: bold;
+    font-size: 1.8rem;
+}
+
+.transaction p:last-child {
+    margin-bottom: 0px;
+    border-bottom: unset;
+}
+
+.gain {
+    background-color: yellowgreen;
+}
+
+.loss {
+    background-color: tomato;
+}

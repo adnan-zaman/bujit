@@ -73,8 +73,9 @@ class TransactionData {
    * -name : transaction name
    * -other : name of other account (for transfers)
    */
-  constructor(amount, type, {name = null, other = null, date = Date.now()} = {}) {
+  constructor(amount, type, {name = null, other = null, date = new Date()} = {}) {
     this.#amount = amount; 
+    this.#type = type;
     this.#name = type = type;
     this.#name = name;
     this.#other = other;

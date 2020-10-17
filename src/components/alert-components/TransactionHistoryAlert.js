@@ -1,6 +1,8 @@
 import React from "react"
 import Transaction from "./Transaction"
 import "../Dialog.css"
+import "../../App.css"
+import "./Transaction.css"
 
 
 /**
@@ -14,7 +16,6 @@ import "../Dialog.css"
  * @param {object} ref the focus target
  */
 function TransactionHistoryAlert(props, ref) {
-    
     const transactList = props.transactions.map((transact, index) =>
         <Transaction
             key={index}
@@ -23,14 +24,20 @@ function TransactionHistoryAlert(props, ref) {
             type={transact.type}
             name={transact.name}
             other={transact.other}
+            //leave out day of the week
+            date={transact.date.toDateString().substring(transact.date.toDateString().indexOf(' '))} 
         />         
     );
 
     return (
         <div className="alert vert-flex-container">
             <h2>Transaction History: {props.name}</h2>
-            <div>
-                {transactList}
+            <div className="transact-area">
+                {
+                    (transactList.length > 0) ? 
+                     transactList :
+                     <p>There are no transactions for this account.</p>
+                }
             </div>
             <div className="button-container">
                 <div className="button-holder">

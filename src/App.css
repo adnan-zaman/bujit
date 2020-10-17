@@ -18,9 +18,20 @@ html {
   display: none;
 }
 
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
 .vert-flex-container {
   display: flex;
   flex-direction: column;
+}
+
+.list-element {
+  border: 5px outset #888;
+  margin: 20px 5px 20px 5px; 
 }
 
 :root {
