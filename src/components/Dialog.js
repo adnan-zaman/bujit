@@ -4,6 +4,7 @@ import EditForm from "./form-components/EditForm"
 import AddForm from "./form-components/AddForm"
 import SubtractForm from "./form-components/SubtractForm"
 import TransferForm from "./form-components/TransferForm"
+import PayForm from "./form-components/PayForm"
 import Alert from "./alert-components/Alert"
 import TransactionHistoryAlert from "./alert-components/TransactionHistoryAlert"
 import "./Dialog.css"
@@ -53,11 +54,16 @@ function Dialog(props, ref) {
         case "transfer":
             dialogBody = <TransferForm {...properties} />
             break;
+        case "pay":
+            dialogBody = <PayForm {...properties} />
+            break;
         case "alert":
             dialogBody = <Alert {...properties} />
             break;
         case "history":
             dialogBody = <TransactionHistoryAlert {...properties} />
+            break;
+
     }
 
 

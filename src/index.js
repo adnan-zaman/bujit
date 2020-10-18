@@ -28,6 +28,19 @@ class AccountData {
     this.#transactionList = [];
   }
 
+  /**
+   * Adds two numbers together. This method ensures
+   * no floating point errors.
+   * 
+   * @param {number} amount1 number representing money value
+   * @param {number} amount2  number representing money value
+   * 
+   * @returns {number} the sum
+   */
+  static add(amount1, amount2) {
+    return currency(amount1).add(amount2).value;
+  }
+
   get balance() {
     return this.#balance.value;
   }
@@ -51,9 +64,22 @@ class AccountData {
   addTransaction(amount, type, {name = null, other = null}) {
     if (this.#transactionList.unshift(new TransactionData(amount, type, {name : name, other : other})) > 10)
       this.#transactionList.pop();
-
   }
 
+  /**
+   * Takes a percentage of the given pay amount
+   * and adds to the account. Percentage depends on
+   * account's percent property
+   * 
+   * @param {number} totalPay the total pay amount
+   * 
+   * @returns {number} the amount added
+   */
+  pay(totalPay) {
+    const paid = currency(totalPay).multiply(this.percent/100);
+    this.#balance = this.#balance.add(paid);
+    return paid;
+  }
 }
 
 

@@ -18,7 +18,8 @@ function Transaction(props) {
             <label htmlFor={props.id}>
                 <span className="visually-hidden">
                     Amount
-                    {(props.type === "add") ? "added" :
+                    {
+                     (props.type === "add" || props.type === "pay") ? "added" :
                      (props.type === "subtract") ? "removed" :
                      "transfered"
                     }
@@ -26,7 +27,10 @@ function Transaction(props) {
             </label>
             <input 
                 id={props.id}
-                className={(props.type === "add" || props.type === "transfer-in") ? "gain" : "loss"}
+                className={(props.type === "add" || 
+                            props.type === "transfer-in" || 
+                            props.type === "pay") ? "gain" : "loss"
+                          }
                 value={props.amount} 
                 type="number" 
                 disabled={true}/>

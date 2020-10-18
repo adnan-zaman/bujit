@@ -63,6 +63,7 @@ function App(props) {
    * - subtract: {id : account id, name: account name, balance: account balance}
    * - transfer : {accounts : AccountData[]}
    * - history : {id : account id, name: account name}
+   * - pay : nothing needed
    * - alert : {msg : message, (name : f)} at least one property msg that contains a string which
    * is the messaged to be displayed followed one or more properties where the property name is
    * the name of button and the property value is the callback function to be called on button click
@@ -100,6 +101,9 @@ function App(props) {
           break;
         case "transfer":
           data.onSubmit = transferMoney;
+          break;
+        case "pay":
+          data.onSubmit = payAccounts;
           break;
       }
       data.onCancel = stopDialog;
@@ -161,7 +165,7 @@ function App(props) {
         onHistory={(accData, element) => startDialog("history",element, accData)}
       />);
 
-      totalBalance += acc.balance;
+      totalBalance = AccountData.add(totalBalance, acc.balance);
    }
   
 
@@ -273,6 +277,15 @@ function App(props) {
     stopDialog();
   }
 
+  function payAccounts(amount) {
+    accounts.forEach(acc => {
+      const paid = acc.pay(amount);
+      acc.addTransaction(paid, "pay", {name : "Paid"});
+    });
+    setAccounts(accounts);
+    stopDialog();
+  }
+
   /**
    * Creates a transfer dialog if there are enough
    * accounts to do so
@@ -285,6 +298,23 @@ function App(props) {
     else 
       startDialog("alert", element,
         {msg : "You need at least 2 accounts to transfer",
+         OK : stopDialog});
+  }
+
+  /**
+   * Creates a pay dialog if all percents
+   * add up to 100
+   * 
+   * @param {*} element id of DOM element or DOM element of pay button
+   */
+  function handlePay(element) {
+    let totalPercent = 0;
+    accounts.forEach(acc => totalPercent += acc.percent);
+    if (totalPercent === 100)
+      startDialog("pay", element);
+    else 
+      startDialog("alert", element,
+        {msg : "All account percents must add up to 100",
          OK : stopDialog});
   }
 
@@ -322,6 +352,12 @@ function App(props) {
             onClick={() => handleTransfer("transfer")} 
           >
             Transfer
+          </button>
+          <button 
+            id="pay"
+            onClick={() => handlePay("pay")} 
+          >
+            Pay
           </button>
         </section>
       </div>
