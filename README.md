@@ -10,17 +10,17 @@ A budgeting and expense tracking app made with React.
 - Add/remove money
 - Edit account info
 - Transfer money between accounts
+- Pay feature that distrbutes pay pased on account percentages
+- View account transaction history
+
 
 ## Planned features left to implement
 
-- Pay feature that distrbutes pay pased on account percentages
-- View account transaction history
 - Save data locally 
 
 ## Working on
 
-- Alert notif before deleting account
-- Alert notif if trying to transfer with 0 accounts
+- Save data locally 
 
 
 
