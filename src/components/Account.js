@@ -7,7 +7,7 @@ function Account(props) {
         <div className='acc-container list-element' id={props.id}>
             <label htmlFor='bal' className='acc-name'>{props.name}</label>
             <input 
-                id='bal' 
+                id={'bal-'+props.id} 
                 type='text' 
                 className='acc-bal' 
                 value={"$" + props.balance} 
@@ -16,7 +16,7 @@ function Account(props) {
                 
             <label htmlFor='percent' className='percent-label'>Percentage</label>   
             <input 
-                id='percent' 
+                id={'percent-'+props.id} 
                 className='acc-percent' 
                 type='text'  
                 value={props.percent + "%"} 

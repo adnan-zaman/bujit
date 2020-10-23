@@ -101,7 +101,11 @@ function TransferForm(props, ref) {
         e.preventDefault();
         if (!validateAllFields(validateFuncs.current, setErrorMessage)[0])
             return;
-        props.onSubmit(props.accounts[sourceAcc].id, props.accounts[targetAcc].id, Number(transferAmount));
+        props.onSubmit(props.accounts[sourceAcc].id, 
+                       props.accounts[sourceAcc].name, 
+                       props.accounts[targetAcc].id, 
+                       props.accounts[targetAcc].name, 
+                       Number(transferAmount));
     }
 
     return (

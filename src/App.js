@@ -40,7 +40,6 @@ function usePrevious(newVal) {
 
 function App(props) {
 
-  
   /* Focus Management & Dialog Logic */
 
   //depending on input, dialog may be set to a Dialog component
@@ -76,7 +75,7 @@ function App(props) {
       focusTargets.from.current = element;
 
     if (type === "history") {
-      for (const acc of accounts) {
+      for (const acc of props.accounts) {
         if (acc.id === data.id) {
           data.transactions = acc.transactions;
           delete data.id;
@@ -108,8 +107,7 @@ function App(props) {
       }
       data.onCancel = stopDialog;
     }
-    if (type === "history")
-      console.log(data);
+ 
     setDialog(<Dialog 
       type={type}
       properties={data}
@@ -136,16 +134,14 @@ function App(props) {
 
   /* Account Data */
   
-  //array of account objects
-  const [accounts, setAccounts] = useState(props.accounts);
-
   //total balance
   let totalBalance = 0;
 
    //array of Account components 
    const accList = [];
-   
-   for (let acc of accounts) {
+
+
+   for (let acc of props.accounts) { 
     accList.push(<Account 
         name={acc.name} 
         balance={acc.balance} 
@@ -179,19 +175,18 @@ function App(props) {
    * @param {number} startingPercent account percentage
    */
   function addAccount(accName, startingBal = 0, startingPercent = 0.0) {
-    accounts.push(new AccountData(accName, startingBal, startingPercent, nanoid()));
-    setAccounts(accounts);
     stopDialog();
+    props.addAccount(accName, startingBal, startingPercent);
   }
 
   /**
    * Delete an account object
    * 
-   * @param {string} id account id
+   * @param {number} id account id
    */
   function deleteAccount(id) {
-    const updatedAccounts = accounts.filter((acc) => acc.id !== id);
-    setAccounts(updatedAccounts);
+    stopDialog();
+    props.deleteAccount(id);
   }
 
 
@@ -200,90 +195,57 @@ function App(props) {
   /**
    * Edits details of an existing account.
    * 
-   * @param {string} id account id
+   * @param {number} id account id
    * @param {string} newName new account name
    * @param {number} newPercent new account percentage
    */
   function editAccount(id, newName, newPercent) {
-    for (let acc of accounts) {
-      if (acc.id === id) {
-        acc.name = newName;
-        acc.percent = newPercent;
-        break;
-      }
-    }
-    setAccounts(accounts);
     stopDialog();
+    props.editAccount(id, newName, newPercent);
+    
   }
 
   /**
    * Add money to an existing account.
    * 
-   * @param {string} id 
+   * @param {number} id 
    * @param {number} amount 
    */
   function addMoney(id, amount, transactionName) {
-    for (let acc of accounts) {
-      if (acc.id === id) {
-        acc.addMoney(amount);
-        acc.addTransaction(amount, "add", {name : transactionName});
-        break;
-      }
-    }
-    setAccounts(accounts);
     stopDialog();
+    props.addMoney(id, amount, transactionName);
   }
 
   /**
    * Remove money from an existing account.
    * 
-   * @param {string} id 
+   * @param {number} id 
    * @param {number} amount 
    */
   function removeMoney(id, amount, transactionName) {
-    for (let acc of accounts) {
-      if (acc.id === id) {
-        acc.removeMoney(amount);
-        acc.addTransaction(amount, "subtract", {name : transactionName});
-        break;
-      }
-    }
-    setAccounts(accounts);
     stopDialog();
+    props.removeMoney(id, amount, transactionName);
   }
 
   /**
    * Transfers money from one account to another
    * 
-   * @param {string} sourceId account id of account to take money from
-   * @param {string} targetId account id of account to tranfer money to 
+   * @param {number} sourceId account id of account to take money from
+   * @param {string} sourceName name of account to take money from
+   * @param {number} targetId account id of account to tranfer money to 
+   * @param {string} targetName name of account to transfer money to
    * @param {number} amount amount of money to transfer
    */
-  function transferMoney(sourceId, targetId, amount) {
-    let sourceAcc;
-    let targetAcc;
-    for (let acc of accounts) {
-      if (acc.id === sourceId) 
-        sourceAcc = acc;
-      if (acc.id === targetId) 
-        targetAcc = acc;     
-    }
-    sourceAcc.removeMoney(amount);
-    sourceAcc.addTransaction(amount, 'transfer-out', {other : targetAcc.name});
-    targetAcc.addMoney(amount);
-    targetAcc.addTransaction(amount, 'transfer-in', {other : sourceAcc.name});
-    
-    setAccounts(accounts);
+  function transferMoney(sourceId, sourceName, targetId, targetName, amount) {
     stopDialog();
+    props.transferMoney(sourceId, sourceName, targetId, targetName, amount);
+  
+    
   }
 
   function payAccounts(amount) {
-    accounts.forEach(acc => {
-      const paid = acc.pay(amount);
-      acc.addTransaction(paid, "pay", {name : "Paid"});
-    });
-    setAccounts(accounts);
     stopDialog();
+    props.pay(amount);
   }
 
   /**
@@ -293,8 +255,8 @@ function App(props) {
    * @param {*} element id of DOM element or DOM element of transfer button
    */
   function handleTransfer(element) {
-    if (accounts.length > 1)
-      startDialog("transfer", element, {accounts: accounts});
+    if (props.accounts.length > 1)
+      startDialog("transfer", element, {accounts: props.accounts});
     else 
       startDialog("alert", element,
         {msg : "You need at least 2 accounts to transfer",
@@ -309,7 +271,7 @@ function App(props) {
    */
   function handlePay(element) {
     let totalPercent = 0;
-    accounts.forEach(acc => totalPercent += acc.percent);
+    props.accounts.forEach(acc => totalPercent += acc.percent);
     if (totalPercent === 100)
       startDialog("pay", element);
     else 
