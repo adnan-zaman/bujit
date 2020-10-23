@@ -68,11 +68,12 @@ class AccountData {
     this.#balance = this.#balance.subtract(amount);
   }
 
-  addTransaction(amount, type, {name = null, other = null, date = new Date()} ) {
-    const transaction = new TransactionData(amount, type, {name : name, other : other, date : date});
+  addTransaction(amount, type, {id = null, name = null, other = null, date = new Date()} ) {
+    const transaction = new TransactionData(amount, type, {id : id, name : name, other : other, date : date});
+    let oldestTransaction;
     if (this.#transactionList.unshift(transaction) > 10)
-      this.#transactionList.pop();
-    return transaction;
+      oldestTransaction = this.#transactionList.pop();
+    return [transaction, oldestTransaction];
   }
 
   /**
@@ -104,19 +105,23 @@ class AccountData {
 
 class TransactionData {
 
+  #id;
+
   /**
    * An immutable object that represents a single transaction.
    * 
    * @param {number} amount transaction amount
    * @param {string} type type of transaction (add,subtract etc.)
    * @param {object} options optional parameters {name, other, date} 
+   * -id : transaction's id
    * -name : transaction name
    * -other : name of other account (for transfers)
    * -date : date of transaction
    */
-  constructor(amount, type, {name = null, other = null, date = new Date()} = {}) {
+  constructor(amount, type, {id = null, name = null, other = null, date = new Date()} = {}) {
     this.amount = amount;
     this.type = type;
+    this.id = id;
     this.name = name;
     this.other = other;
     this.date = date;
@@ -130,6 +135,15 @@ class TransactionData {
     });
   }
 
+  get id() {
+    return this.#id;
+  }
+
+  set id(value) {
+    if (!this.#id)
+      this.#id = value;
+  }
+
 
 }
 
@@ -137,7 +151,7 @@ let db;
 let ACC_DATA = [];
 
 /** DB Setup */
-const dbRequest = window.indexedDB.open('bujit_db_test',1);
+const dbRequest = window.indexedDB.open('bujit_db',1);
 
 dbRequest.onupgradeneeded = function(e) {
   let db = e.target.result;
@@ -170,7 +184,7 @@ dbRequest.onsuccess = function(e) {
         const txCursor = e.target.result;
         if (txCursor) {
           const tx = txCursor.value;
-          accData.addTransaction(tx.amount, tx.type, {name : tx.name, other : tx.other, date : tx.date});
+          accData.addTransaction(tx.amount, tx.type, {id : tx.id, name : tx.name, other : tx.other, date : tx.date});
           txCursor.continue();
         }
         else {
@@ -319,7 +333,8 @@ function moneyTransaction(transactionInfo) {
 
       accounts[acc.id] = acc;
       acc[txMethod](txDetails.amount);
-      transactions[acc.id] = acc.addTransaction(txDetails.amount, txDetails.type, txDetails.options);
+      const transactionOutput = acc.addTransaction(txDetails.amount, txDetails.type, txDetails.options);
+      transactions[acc.id] = transactionOutput;
     }
   }
 
@@ -331,7 +346,10 @@ function moneyTransaction(transactionInfo) {
 
   for (const id in accounts) {
     accountStore.put(accounts[id].toObject()).onsuccess = e => {
-      transactionStore.add({...transactions[id], account : Number(id)});
+      transactionStore.add({...transactions[id][0], account : Number(id)}).onsuccess = e => {
+        transactions[id][0].id = e.target.result;
+        transactions[id][1] && transactionStore.delete(transactions[id][1].id);
+      };
     };
   }
   
