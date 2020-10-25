@@ -1,8 +1,8 @@
-form input, form select {
+form input {
     width: 40%;
 }
 
-form  input[class *= "num"]{
+form input[class *= "num"]{
     width: 20%;
 }
 

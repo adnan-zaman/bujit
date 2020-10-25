@@ -9,9 +9,10 @@
 }
 
 .transaction input {
-    width: 25%;
+    width: 45%;
     float: right;
     margin-bottom: 2px;
+    text-align: right;
 }
 
 .transaction p {

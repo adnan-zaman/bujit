@@ -1,6 +1,5 @@
 import React, {useState, useRef, useEffect } from "react"
-import { nanoid } from "nanoid"
-import { AccountData, TransactionData } from "./index"
+import { AccountData } from "./index"
 import Dialog from "./components/Dialog"
 import Account from "./components/Account"
 import "./App.css"
@@ -149,9 +148,9 @@ function App(props) {
         id={acc.id} 
         key={acc.id}
         onDelete={(id, name, elt) => startDialog("alert", elt, 
-                                                  {msg: `Are you sure you want to delete ${name}?`, 
-                                                   No : stopDialog, 
-                                                   Yes : () => {deleteAccount(id); stopDialog()}
+                                                  {msg: `Are you sure you want to delete ${name}?`,
+                                                   Yes : () => {deleteAccount(id); stopDialog()}, 
+                                                   No : stopDialog 
                                                   }
                                                 )}
 
@@ -294,20 +293,21 @@ function App(props) {
         </section>
         <section className='toolbar'>
           <label htmlFor='total-bal' className='total-bal'>
-            Total <span className="visually-hidden">Balance</span>:
+            Total <span className="visually-hidden">Balance</span>
           </label>
           <input 
               id='total-bal' 
               type='text' 
               className='total-bal' 
-              value={"$" + totalBalance} 
+              value={"$" + totalBalance.toFixed(2)} 
               disabled={true}
           />
+          
           <button 
             id="add-account"
             onClick={() => startDialog("create", "add-account") }
           >
-            Add Account
+            Add <span className='visually-hidden'>Account</span>
           </button>
           <button 
             id="transfer"
@@ -321,6 +321,9 @@ function App(props) {
           >
             Pay
           </button>
+          
+          
+          
         </section>
       </div>
 

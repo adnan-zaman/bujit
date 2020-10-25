@@ -1,6 +1,7 @@
 .dialog {
     position: absolute;
     border: 3px solid black;
+    border-radius: 8px;
     padding: 10px 5px 2px 5px;
     max-height: 100vh;
     transform: translate(

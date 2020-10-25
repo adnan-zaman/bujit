@@ -31,7 +31,7 @@ function Transaction(props) {
                             props.type === "transfer-in" || 
                             props.type === "pay") ? "gain" : "loss"
                           }
-                value={props.amount} 
+                value={props.amount.toFixed(2)} 
                 type="number" 
                 disabled={true}/>
             

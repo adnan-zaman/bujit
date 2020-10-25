@@ -42,6 +42,10 @@ html {
   --app-container-size: 75vw;
 }
 
+.danger {
+  background-color: #5a2217;;
+}
+
 button {
   border-radius: 4px;
   padding: 2px;
@@ -52,12 +56,15 @@ button {
 
 label, button, input, select {
   font-size: 3rem;
+  overflow-x: hidden;
 }
+
 
 /* STYLES */
 
 .app-container {
-  height: 100vh;
+  /*dynamic browser height */
+  height: calc(var(--vh,1vh) * 100);
   width: var(--app-container-size);
   margin: auto;
 }
@@ -91,17 +98,25 @@ p {
 }
 
 .toolbar {
-  flex: 0 1 15%;
-  border-left: 1px solid black;
-  border-right: 1px solid black;
+  flex: 0 1 auto;
+  display: flex;
+  
+  
+}
+
+.toolbar button {
+  flex: 0 1 auto;
+ 
 }
 
 .total-bal {
-  width: 25%;
+  flex: 1 1 auto;
 }
 
 label.total-bal {
   background-color : thistle;
+  flex: 0 1 auto;
+  
 }
 
 

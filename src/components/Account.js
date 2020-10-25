@@ -5,12 +5,12 @@ import "./Account.css"
 function Account(props) {
     return (
         <div className='acc-container list-element' id={props.id}>
-            <label htmlFor='bal' className='acc-name'>{props.name}</label>
+            <label htmlFor={'bal'+props.id} className='acc-name'>{props.name}</label>
             <input 
                 id={'bal-'+props.id} 
                 type='text' 
                 className='acc-bal' 
-                value={"$" + props.balance} 
+                value={"$" + props.balance.toFixed(2)} 
                 disabled={true}
             />
                 
@@ -68,7 +68,7 @@ function Account(props) {
             </button>
             <button 
                 id={'del-'+props.id} 
-                className='acc-delete' 
+                className='acc-delete danger' 
                 onClick={() => props.onDelete(props.id, props.name,'del-'+props.id)}>
                 Delete
                 <span className='visually-hidden'>{props.name}</span> 

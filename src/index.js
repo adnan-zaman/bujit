@@ -52,22 +52,56 @@ class AccountData {
   }
 
   set id(value) {
+    //id can only be set the first time
     if (!this.#id)
       this.#id = value;
   }
 
+  /**
+   * Returns this account's transactions
+   * 
+   * @returns {TransactionData[]} a list of transactions
+   */
   get transactions() {
     return [...this.#transactionList];
   }
 
+  /**
+   * Adds money to this account
+   * 
+   * @param {number} amount amount added
+   */
   addMoney(amount) {
     this.#balance = this.#balance.add(amount);
   }
 
+  /**
+   * Removes money from this account
+   * 
+   * @param {number} amount amount to remove
+   */
   removeMoney(amount) {
     this.#balance = this.#balance.subtract(amount);
   }
 
+  /**
+   * Adds a transaction to this account's transactions list.
+   * Accounts have a max of 10 transactions at a time so adding an 11th
+   * will remove the oldest one.
+   * 
+   * @param {number} amount transaction amount
+   * @param {string} type type of transaction (add,subtract,transfer-in etc.)
+   * @param {object} options additional options for the transaction
+   * - id {number} : transaction id
+   * - name {string} : transaction name
+   * - other {string} : name of other account (for transfers)
+   * - date {Date} : transaction date
+   * 
+   * @returns {TransactionData[]} 
+   * - [0] the new transaction
+   * - [1] {if transaction was removed, returns that transaction, undefined otherwise
+   * 
+   */
   addTransaction(amount, type, {id = null, name = null, other = null, date = new Date()} ) {
     const transaction = new TransactionData(amount, type, {id : id, name : name, other : other, date : date});
     let oldestTransaction;
@@ -140,6 +174,7 @@ class TransactionData {
   }
 
   set id(value) {
+    //id can only be set the first time
     if (!this.#id)
       this.#id = value;
   }
@@ -225,7 +260,7 @@ function addAccount(name, bal, percent) {
 /**
  * Delete account (and all associated transactions) from database
  * 
- * @param {string} id account id
+ * @param {number} id account id
  */
 function deleteAccount(id) {
   const dbTransaction = db.transaction(['accounts','transactions'],'readwrite');
@@ -253,7 +288,7 @@ function deleteAccount(id) {
 /**
  * Modify an existing account
  * 
- * @param {string} id account id
+ * @param {number} id account id
  * @param {string} newName account name
  * @param {number} newPercent account percent
  */
@@ -278,7 +313,7 @@ function editAccount(id, newName, newPercent) {
 /**
  * Add money to an existing account
  * 
- * @param {string} id account id
+ * @param {number} id account id
  * @param {number} amount amount of money to be added
  * @param {string} transactionName name of transaction
  */
@@ -288,12 +323,28 @@ function addMoney(id, amount,transactionName) {
   moneyTransaction(info);
 }
 
+/**
+ * Remove money from an existing account
+ * 
+ * @param {number} id account id
+ * @param {number} amount amount of money to be removed
+ * @param {string} transactionName name of transaction
+ */
 function removeMoney(id, amount, transactionName) {
   const info = {};
   info[id] = ['removeMoney', {amount : amount, type : 'subtract', options : {name : transactionName}}];
   moneyTransaction(info);
 }
 
+/**
+ * Transfer money between two accounts
+ * 
+ * @param {number} sourceId id of account to take money from
+ * @param {string} sourceName name of account to take money from
+ * @param {number} targetId id of account to send money to
+ * @param {string} targetName name of account to send money to
+ * @param {number} amount amount of money to transfer
+ */
 function transferMoney(sourceId, sourceName, targetId, targetName, amount) {
   const info = {};
   info[sourceId] = ['removeMoney', {amount : amount, type : 'transfer-out', options : {other : targetName}}];
