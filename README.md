@@ -32,7 +32,8 @@ Check your last ten transactions (adding, removing, transferring and getting pai
 - View account transaction history
 - Data is saved locally using IndexedDB
 
+## Try it out!
 
-Try it out live at: festive-allen-916181.netlify.app/
+Try it out live at: festive-allen-916181.netlify.app/![app link](festive-allen-916181.netlify.app/)
 
 
