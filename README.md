@@ -1,16 +1,25 @@
-# Bujit (work in progress)
+# Bujit 
 
-A budgeting and expense tracking app made with React.
+A budgeting and expense tracking app made with React with client-side storage.
 
-![demo](/media/demo.gif) ![demo2](/media/demo2.gif)
-
-## Highlighted Features
+## Notable Features
 
 ### Transfers
 
-![transfer demo](/media/transfer.gif)
+![transfer demo](/media/transfer.gif)  
 Transfer money between two accounts. Choosing one account will
 automatically make that account disabled in the second select box. 
+
+### Pay Day
+
+![pay demo](/media/pay.gif)  
+Choose what percentage of your pay cheque you want going to what account
+and Bujit will automatically distribute the money accordingly.
+
+### Transaction History
+
+![history demo](/media/history.gif)  
+Check your last ten transactions (adding, removing, transferring and getting paid)
 
 
 ## Implemented features
@@ -19,7 +28,7 @@ automatically make that account disabled in the second select box.
 - Add/remove money
 - Edit account info
 - Transfer money between accounts
-- Pay feature that distrbutes pay pased on account percentages
+- Pay feature that distrbutes pay based on account percentages
 - View account transaction history
 - Data is saved locally using IndexedDB
 
